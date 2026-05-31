@@ -35,7 +35,8 @@ export function useSocket(roomId) {
     // Socket.io 서버에 연결
     // 첫 번째 인자: 서버 주소
     // 두 번째 인자: 연결 옵션
-      const socket = io('http://localhost:3000', {
+      const socket = io(
+          import.meta.env.VITE_API_URL || 'http://localhost:3000', {
       auth: { token },               // 연결 시 JWT 토큰 전달 (서버에서 인증에 사용)
       transports: ['websocket'],     // WebSocket만 사용 (polling 방식 비활성화로 더 빠름)
     })
