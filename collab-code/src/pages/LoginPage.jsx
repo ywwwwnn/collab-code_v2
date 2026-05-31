@@ -22,6 +22,11 @@ import { useNavigate } from 'react-router-dom'
 // 예) axios.post('/api/auth/login', { studentId, password })
 import axios from 'axios'
 
+// 배포 환경에서는 Vercel 프론트와 Render 백엔드의 주소가 다르기 때문에
+// API 요청을 Render 백엔드로 보내기 위해 VITE_API_URL을 사용한다.
+// 로컬 개발 환경에서는 값이 없으면 기존처럼 상대 경로('/api')를 사용한다.
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 // ── 스타일 객체 ──────────────────────────────────────────────────
 // React에서 CSS 스타일을 JavaScript 객체로 작성하는 방식
 // 이렇게 하면 컴포넌트와 스타일이 한 파일에 있어서 관리가 편함
@@ -105,7 +110,7 @@ export default function LoginPage() {
     try {
       // 서버에 코드 발송 요청
       // /api/auth/send-code → vite proxy가 http://localhost:3000/api/auth/send-code 로 전달
-      await axios.post('/api/auth/send-code', { email: form.email })
+      await axios.post('${API_URL}/api/auth/send-code', { email: form.email })
 
       // 성공 시 다음 단계로
       setStep('code')
@@ -127,7 +132,7 @@ export default function LoginPage() {
     setError(''); setLoading(true)
 
     try {
-      await axios.post('/api/auth/verify-code', { email: form.email, code: form.code })
+      await axios.post('${API_URL}/api/auth/verify-code', { email: form.email, code: form.code })
       setStep('done')        // 인증 완료 단계로
       setSuccess('이메일 인증이 완료되었습니다!')
     } catch (e) {
@@ -146,7 +151,7 @@ export default function LoginPage() {
     try {
       if (mode === 'login') {
         // 로그인 API 호출
-        const { data } = await axios.post('/api/auth/login', {
+        const { data } = await axios.post('${API_URL}/api/auth/login', {
           studentId: form.studentId,
           password: form.password
         })
@@ -164,7 +169,7 @@ export default function LoginPage() {
         if (step !== 'done') return setError('이메일 인증을 완료해주세요')
 
         // 회원가입 API 호출
-        const { data } = await axios.post('/api/auth/register', form)
+        const { data } = await axios.post('${API_URL}/api/auth/register', form)
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
         navigate('/')
