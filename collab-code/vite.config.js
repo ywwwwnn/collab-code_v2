@@ -6,9 +6,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-	'/api': 'http://localhost:3000',
+	'/api': 'https://collab-backend-v2.onrender.com',
 	'/socket.io': {
-  	target: 'http://localhost:3000',
+  	target: 'https://collab-backend-v2.onrender.com',
   	ws: true,
   	changeOrigin: true,
 	},
