@@ -110,7 +110,7 @@ export default function LoginPage() {
     try {
       // 서버에 코드 발송 요청
       // /api/auth/send-code → vite proxy가 http://localhost:3000/api/auth/send-code 로 전달
-      await axios.post('${API_URL}/api/auth/send-code', { email: form.email })
+      await axios.post(`${API_URL}/api/auth/send-code`, { email: form.email })
 
       // 성공 시 다음 단계로
       setStep('code')
@@ -132,7 +132,7 @@ export default function LoginPage() {
     setError(''); setLoading(true)
 
     try {
-      await axios.post('${API_URL}/api/auth/verify-code', { email: form.email, code: form.code })
+      await axios.post(`${API_URL}/api/auth/verify-code`, { email: form.email, code: form.code })
       setStep('done')        // 인증 완료 단계로
       setSuccess('이메일 인증이 완료되었습니다!')
     } catch (e) {
@@ -151,7 +151,7 @@ export default function LoginPage() {
     try {
       if (mode === 'login') {
         // 로그인 API 호출
-        const { data } = await axios.post('${API_URL}/api/auth/login', {
+        const { data } = await axios.post(`${API_URL}/api/auth/login`, {
           studentId: form.studentId,
           password: form.password
         })
@@ -169,7 +169,7 @@ export default function LoginPage() {
         if (step !== 'done') return setError('이메일 인증을 완료해주세요')
 
         // 회원가입 API 호출
-        const { data } = await axios.post('${API_URL}/api/auth/register', form)
+        const { data } = await axios.post(`${API_URL}/api/auth/register`, form)
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
         navigate('/')
